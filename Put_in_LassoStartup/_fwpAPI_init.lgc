@@ -1,0 +1,92 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		_fwpAPI_initVars.lgc }
+	{rsrcType=		file }
+	{rsrcName=		_fwpAPI_initVars }
+	{rsrcHTTP=		http://www.pageblocks.org/refc/_fwpAPI_initVars }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits/Nikolaj de Fine Licht }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	http://www.pageblocks.org/ }
+
+	{desc=			Initializes a number of constants for
+					the framework, resides in LassoStartup. }
+
+	{maintvsrn=		1.0.0 }
+	{maintrelease=	5.0.0 }
+	{maintdate=		2008-08-01 }
+	{maintauthor=	Greg Willits/Nikolaj de Fine Licht }
+	{maintnotes=	initial release }
+*/
+//............................................................................
+
+
+//============================================================================
+//
+//	(F) Initialize Site Constants
+//
+//	these vars control FWPro operation
+//
+//	Maintenance Notes:
+//
+//	ver 1.0 (2008-08-01) -- only constants are left in LassoStartup
+//
+//............................................................................
+
+define_constant:'fw_kLassoVersion',			integer: ((lasso_version->(split:' ')->last)->get:1);
+define_constant:'fw_kLassoVersionMinor',	integer: (((lasso_version->(split:' ')->last)->split:'.')->get:2);
+define_constant:'fw_kLassoVersionFix',		integer: (((lasso_version->(split:' ')->last)->split:'.')->get:3);
+define_constant:'fw_kLassoPlatform',		lasso_version->(split:' ')->get:1;
+
+// lasso connector name = pb adaptor name
+
+define_constant:'fw_kDBConnectors',			(map:
+											'mysqlds'					= 'MySQL',
+											'openbaseds'				= 'Openbase',
+											'oracle'					= 'Oracle',
+											'postgresql'				= 'Postgres',
+											'sqlserver'					= 'MSSql',
+											'odbc'						= 'ODBC',
+											'jdbc'						= 'JDBC',
+											'sqliteconnector'			= 'Sqlite',
+											'spotlightds'				= 'Spotlight',
+											'fmremotedatasource'		= 'FMP',
+											'fmserveradvanceddatasource'= 'FMPadv'
+											);
+
+define_constant:'fw_kMVSCacheMaxStringLen', 		255;
+define_constant:'fw_kUsePageStringsAutoDegrade', 	true;
+define_constant:'fw_kUseAppStringsAutoDegrade', 	true;
+define_constant:'fw_kURLparamsChar',				',';
+
+define_constant:'fw_kPageExt',		'.lasso';
+define_constant:'fw_kLogicExt',		'.lgc';
+define_constant:'fw_kDisplayExt',	'.dsp';
+define_constant:'fw_kCTagExt',		'.ctag';
+define_constant:'fw_kCTypExt',		'.ctyp';
+define_constant:'fw_kCnfgExt',		'.cnfg';
+define_constant:'fw_kConfigExt', 	 fw_kCnfgExt;
+
+define_constant:'fw_kAllowed',		'Y';
+define_constant:'fw_kNotAllowed',	'N';
+define_constant:'fw_kChecked',		'checked="true"';
+define_constant:'fw_kSelected',		'selected="true"';
+
+define_constant:'fw_kDisabled',		0;
+define_constant:'fw_kEnabled',		1;
+define_constant:'fw_kChatty',		3;
+define_constant:'fw_kVerbose',		5;
+
+define_constant:'fw_kPageIsWebService',		'__PageIsWebService__';
+define_constant:'fw_kPageIsAjaxHandler',	'__PageIsAjaxHandler__';
+
+?>

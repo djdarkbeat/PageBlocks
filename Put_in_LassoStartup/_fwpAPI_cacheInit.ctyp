@@ -1,0 +1,116 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		_fwpAPI_cacheInit.ctyp }
+	{rsrcType=		type }
+	{rsrcName=		fwp_configCache }
+	{rsrcHTTP=		http://www.pageblocks.org/refc/_fwpAPI_cacheInit }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	http://www.pageblocks.org/ }
+
+	{desc=			caches config files by creating global var and storing 
+					var name into an array so we can clear globals on command }
+
+	{maintvsrn=		1.2.0 }
+	{maintrelease=	5.1.0 }
+	{maintdate=		2006-09-04}
+	{maintauthor=	Greg Willits }
+	{maintnotes=	changed the reset command to clear all contents, and 
+					changed	the old reset command to ->clear for clearing 
+					specific named contents }
+
+	{maintvsrn=		1.1.0 }
+	{maintrelease=	5.1.0 }
+	{maintdate=		2006-05-30}
+	{maintauthor=	Greg Willits }
+	{maintnotes=	added tagTrace }
+
+	{maintvsrn=		1.0.0 }
+	{maintrelease=	5.0.0 }
+	{maintdate=		2006-01-16}
+	{maintauthor=	Greg Willits }
+	{maintnotes=	initial release }
+*/
+//............................................................................
+//
+//	#cacheName = 'vlist_' + #somevar;
+//	#parsedData = some buinch of actions;
+//
+//	$fw_gConfigCache:
+//		-name = #cacheName,
+//		-value = #parsedData;
+//	
+//............................................................................
+
+
+define_type:'fwp_configCache', -prototype;
+
+	local:'varNames' = set;
+
+//-----------------------------------------------------------------------------	
+define_tag:'add',
+	-required = 'name',
+	-required = 'value';
+
+	$fw_debug ? $fw_tagTracer->(add:'configCache->add', -name = #name);
+
+	global:#name = #value;
+	(self->'varNames')->insert:#name;
+
+/define_tag;
+
+//-----------------------------------------------------------------------------	
+define_tag:'restore',
+	-required = 'name';
+
+	$fw_debug ? $fw_tagTracer->(add:'configCache->restore', -name = #name);
+
+	if: (self->'varNames')->contains:#name;	
+		return: @(global:#name);
+	/if;
+
+/define_tag;
+
+//-----------------------------------------------------------------------------	
+define_tag:'clear',
+	-optional = 'name';
+
+	$fw_debug ? $fw_tagTracer->(add:'configCache->clear', -name = local:'name');
+
+	local:'thisVar' = string;
+
+	if: local_defined:'name';
+		global:#name = null;
+	else;
+		iterate: (self->'varNames'), #thisVar;
+			global:#thisVar = null;
+		/iterate;
+		(self->'varNames') = set;
+	/if;
+
+/define_tag;
+
+
+//-----------------------------------------------------------------------------	
+define_tag:'reset';
+
+	$fw_debug ? $fw_tagTracer->(add:'configCache->reset');
+
+	(self->'varNames') = set;
+
+/define_tag;
+
+
+
+/define_type;
+?>

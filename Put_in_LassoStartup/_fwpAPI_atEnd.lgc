@@ -1,0 +1,44 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007  http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		_fwpAPI_atEnd }
+	{rsrcType=		tag }
+	{rsrcName=		_fwpAPI_atEnd }
+	{rsrcHTTP=		www.pageblocks.org/refc/_fwpAPI_atEnd }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	www.pageblocks.org }
+
+	{desc=			We use atEnd to release all the thread locks
+					used for global caching vars }
+
+	{maintvsrn=		1.0 }
+	{maintrelease=	5.1.0 }
+	{maintdate=		2006-06-08 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	initial release }
+
+*/
+//.............................................................................
+
+define_atEnd: {  
+
+	$fw_gConfigCache_rwlock			->readUnlock;
+	$fw_gDbTableModels_rwlock		->readUnlock;
+	$fw_gErrorMVSConfigs_rwlock		->readUnlock;
+	$fw_gValidatorMVSConfigs_rwlock	->readUnlock;
+	$fw_gAppStringsMVSConfigs_rwlock->readUnlock;
+	$fw_gValueListMVSConfigs_rwlock ->readUnlock;
+	
+};
+
+?>

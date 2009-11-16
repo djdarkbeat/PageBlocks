@@ -1,0 +1,159 @@
+﻿<?lassoscript 
+
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		_fwpAPI_loadAPI.ctag }
+	{rsrcType=		tag }
+	{rsrcName=		_fwpAPI_loadAPI }
+	{rsrcHTTP=		www.pageblocks.org/refc/_fwpAPI_loadAPI }
+
+	{lassoVrsnMin=	8.5.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Jason Huck }
+	{authorEmail=	jason.huck@gmail.com }
+	{authorHTTP=	www.tagswap.net}
+
+	{desc=			loads tags from a specified directory into the global_
+					namespace }
+
+	{maintvsrn=		1.1.0 }
+	{maintrelease=	5.5.0 }
+	{maintdate=		2008-08-01}
+	{maintauthor=	Nikolaj de Fine Licht }
+	{maintnotes=	adopted to PageBlocks naming scheme, added result output }
+
+	{maintvsrn=		1.0 }
+	{maintrelease=	5.5.0 }
+	{maintdate=		2008-08-01 }
+	{maintauthor=	Jason Huck }
+	{maintnotes=	initial release }
+
+*/
+
+//	----------------------------------------------------------------------------
+
+	define_tag(
+		'loadAPI', 
+		-namespace	= 'fwpInit_', 
+		-req		= 'path', -type = 'string', 
+		-opt		= 'ext', -type = 'string', 
+		-opt		= 'refresh', -type = 'boolean', 
+		-priority	= 'replace', 
+		-description= 'Loads all files in the given path into the global namespace.'
+	);
+
+		!local_defined('ext') ? local('ext') = '.inc';
+		!local_defined('refresh') ? local('refresh') = false;
+
+		local(
+			'loadErrors'	= 'N',
+			'tagsLoaded'	= 0, 
+			'ctags'			= array, 
+			'toRemove'		= array, 
+			'tagmapname'	= string_replaceregexp(
+				server_name + #path, 
+				-find= '^[a-zA-Z0-9]', 
+				-replace= '', 
+				-ignorecase
+			)
+		);
+
+		!global_defined(#tagmapname + '_lock') ? global(#tagmapname + '_lock') = thread_lock;
+		local('tagloader_threadlock') = @global(#tagmapname + '_lock');
+		
+		!global_defined(#tagmapname + '_count') ? global(#tagmapname + '_count') = 0;
+		local('tagloader_count') = @global(#tagmapname + '_count');
+		
+		thread_atomic(#tagloader_count);
+		 	!#tagloader_count || #refresh ? #tagloader_count = 0;
+		/thread_atomic;
+		
+		// get list of tags		
+		#path->endswith('/') ? #ctags = file_listdirectory(#path) | #ctags->insert(#path);
+		
+		// remove files that start with a period (LP8.1 compatible method)		
+		iterate(#ctags, local('i'));
+//			#i->beginswith('.') || !#i->endswith(#ext) ? #toRemove->insert(#i);
+			#i->beginswith('.') ? #toRemove->insert(#i); // removed file extension check
+		/iterate;
+		
+		#ctags->removeall(match_regexp('^\\..*'));
+		
+		// compare to current size, only run if different
+		if(#ctags->size != #tagloader_count || #refresh);
+			// loop through list
+			iterate(#ctags, local('thisTag'));
+				// pop off extension
+				local('thisTagName'=#thisTag);
+				#thisTagName->removetrailing(#ext);
+				
+				// if not already defined (or refreshing)
+				if(!lasso_tagexists(#thisTagName) || #refresh);
+					// use global namespace so tags stay resident in memory
+					namespace_using(namespace_global);
+						protect;
+							#ctags->size > 1 ? library(#path + #thisTag) | library(#path);
+							#tagsLoaded += 1;
+							
+							// log any errors
+							handle_error;
+								log_critical('>>>>>>>>>> [Tagloader] Error loading [' + #thisTagName + ']: ' + error_msg);
+								#loadErrors = 'Y';
+							/handle_error;
+						/protect;
+					/namespace_using;
+				else;
+					// account for tags that already exist
+					#tagsLoaded += 1;
+				/if;
+			/iterate;
+			
+			// update global
+			thread_atomic(#tagloader_count);
+			 	#tagloader_count = #tagsLoaded;
+			/thread_atomic;	
+			
+			// log results
+			log_warning('>>>>>>>>>> [Tagloader] ' + #tagsLoaded + ' of ' + #ctags->size + ' tags loaded successfully.');
+			return(#loadErrors);
+			
+		/if;
+		
+	/define_tag;
+	
+	define_tag(
+		'unloadAPI', 
+		-namespace	= 'fwpInit_', 
+		-req		= 'path', 
+		-priority	= 'replace', 
+		-description= 'Unloads all tags in the given path from memory.'
+	);
+		if(file_isdirectory(#path));
+			local('files') = file_listdirectory(#path);
+		else;
+			local('files') = array(#path);
+		/if;
+		
+		iterate(#files, local('i'));
+			if(!#i->beginswith('.') && !#i->endswith('/'));
+				protect;
+					local('ext') = #i->split('.')->last;
+					local('tagname') = string(#i)->removetrailing('.' + #ext)&;
+					namespace_unload(#tagname);
+					// log any errors
+					handle_error;
+						log_critical('>>>>>>>>>> [TagUnloader] Error loading [' + #tagname + ']: ' + error_msg);
+					/handle_error;
+				/protect;
+			/if;
+		/iterate;
+		
+	/define_tag;
+	
+?>

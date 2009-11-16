@@ -1,0 +1,120 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007  http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		_fwpAPI_atBegin }
+	{rsrcType=		tag }
+	{rsrcName=		_fwpAPI_atBegin }
+	{rsrcHTTP=		www.pageblocks.org/refc/_fwpAPI_atBegin }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	www.pageblocks.org }
+
+	{desc=			We use atBegin to trap handle all requests coming into 
+					Lasso and begin the system of parsing it based on what
+					the URL looks like. In this case we tap into the same 
+					pageConfig system that has existed in pb and fwpro for
+					quite some time }
+
+	{maintvsrn=		1.2 }
+	{maintrelease=	5.3.0 }
+	{maintdate=		2007-08-02 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	added extra trap to page init conditional tree
+	 				for handling URLs with trailing slashes that happen 
+	 				when using Apache 2.2 }
+
+	{maintvsrn=		1.1 }
+	{maintrelease=	5.1.0 }
+	{maintdate=		2006-08-30 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	rewritten to cluster file endings into selfConfig
+					and pageConfig groups, and changed pageMethod var
+					values }
+
+	{maintvsrn=		1.0 }
+	{maintrelease=	5.0.0 }
+	{maintdate=		2006-01-16 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	initial release }
+
+*/
+//.............................................................................
+
+	define_atBegin: {
+	
+		//	declare extensions, and any other URL string ending
+		//	that are to be handled as selfConfig pages (aka stub files)
+		
+		local(
+			'fw_selfConfigEndings'	= array(
+			'default.lasso',
+			'index.lasso',
+			'_indexRedirect.lasso',
+			'.lassoapp',
+			'.lasso',
+			'.las',
+			'.html',
+			'.htm'
+			)
+		);
+		
+		//	declare extensions, and any other URL string ending
+		//	that are to be handled as pageConfig pages (aka onefile)
+		
+		local('fw_pageConfigEndings' = array('/'));
+		
+		//---------------------------------------------------------
+		//	do not modify below this line
+		
+		var('fw_pageMethod' 	= null);
+		local('thisEnding'		= string);
+			
+		iterate(#fw_selfConfigEndings, #thisEnding);
+			if(response_filepath->endsWith(#thisEnding));
+				$fw_pageMethod = 'selfConfig';
+				loop_abort;
+			/if;
+		/iterate;
+	
+		iterate(#fw_pageConfigEndings, #thisEnding);
+			if(response_filepath->endsWith(#thisEnding));
+				$fw_pageMethod = 'pageConfig';
+				loop_abort;
+			/if;
+		/iterate;
+		
+		if($fw_pageMethod == 'selfConfig');
+	
+		else(($fw_pageMethod == 'pageConfig') && (response_filepath->endsWith('/')));
+	
+			include('/_indexRedirect.lasso'); 
+			abort;
+		
+		else($fw_pageMethod == 'pageConfig');
+		
+			// make sure PageBlocks API is loaded into global_ namespace thanks to Jason Huck for this tag
+			fwpInit_loadAPI('/_pbAPI/');
+			$__HTML_REPLY__ = fwpPage_init; 
+			abort;
+	
+		else;
+		
+			$fw_pageMethod = 'pageConfig';
+			fwpInit_loadAPI('/_pbAPI/');
+			$__HTML_REPLY__ = fwpPage_init; 
+			abort;
+			
+		/if;
+		
+	};
+
+?>

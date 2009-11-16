@@ -1,0 +1,82 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		fwpActn_loadTableNames.ctag }
+	{rsrcType=		tag }
+	{rsrcName=		fwpActn_loadTableNames }
+	{rsrcHTTP=		www.fwpro.com/refc/fwpActn_loadTableNames }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Nikolaj de Fine Licht }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	www.pageblocks.org }
+
+	{desc=			passes all tables in a given database
+					the tag is -privileged and  must load from LassoStartup 
+					it is used by fwpActn_loadTableModel}
+
+	{maintvsrn=		1.0 }
+	{maintrelease=	5.5.0 }
+	{maintdate=		2008-08-01 }
+	{maintauthor=	Nikolaj de Fine Licht }
+	{maintnotes=	initial release }
+
+*/
+//.............................................................................
+
+
+	define_tag(
+		'fwpActn_loadTableNames',
+		-privileged,
+		-required = 'databaseName'
+	);
+	
+		$fw_debug ? $fw_tagTracer->(add('fwpActn_loadTableNames', -tableName = #databaseName));
+		
+		local('dbTableNames'	= array);
+		
+		inline(
+			-database	= #databaseName
+		);
+		
+		    database_tableNames(#databaseName);
+		        #dbTableNames->(insert(database_tableNameItem));
+		    /database_tableNames;
+		    
+		    if(error_currenterror(-errorcode) == '-609'); // no database found
+		        $fw_error->(insert('5090' = 'fwpActn_loadTableNames'));
+				$fw_debug ? $fw_tagTracer->(add('fwpActn_loadTableNames', 
+												-ERROR	= 'A database with that name not found (Lasso Error: -609)',
+												-db		= #databaseName
+												)
+											);
+		        $fw_criticalLog ? log_critical('>>>>>> pbError : a database with the name ' + #databaseName + ' not found (Lasso Error: -609)');
+		    
+		    else;
+
+			    if(#dbTableNames->size == 0);
+			        $fw_error->(insert('5090' = 'fwpActn_loadTableNames'));
+					$fw_debug ? $fw_tagTracer->(add('fwpActn_loadTableNames', 
+													-ERROR	= 'No tables found in database',
+													-db		= #databaseName
+													)
+												);
+			        $fw_criticalLog ? log_critical('>>>>>> pbError : database ' + #databaseName + ' did not return any tables');
+			    /if;
+			    
+			/if;
+
+		/inline;
+		
+		return(#dbTableNames);
+	
+	/define_tag;
+
+?>

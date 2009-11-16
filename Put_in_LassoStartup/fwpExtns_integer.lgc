@@ -1,0 +1,590 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		fwpExtns_integer.lgc }
+	{rsrcType=		file }
+	{rsrcName=		fwpExtns_integer.lgc }
+	{rsrcHTTP=		http://www.pageblocks.org/refc/fwpExtns_integer }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	http://www.pageblocks.org/ }
+
+	{desc=			Extends the Lasso Integer class with several 
+					custom methods. }
+
+	{maintvsrn=		1.0.0 }
+	{maintrelease=	5.2.5 }
+	{maintdate=		2007-07-23 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	initial release }
+*/
+//............................................................................
+
+
+//-----------------------------------------------------------------------------
+//:	digital data sizes
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'bytes' =     { return: self; });
+$__prototypes__->(find: '__integer__')->(insert: 'kilobytes' = { return: (self * 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'megabytes' = { return: (self * 1048576); });
+$__prototypes__->(find: '__integer__')->(insert: 'gigabytes' = { return: (self * 1073741824); });
+$__prototypes__->(find: '__integer__')->(insert: 'terabytes' = { return: (self * 1099511627800); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'KB' = { return: (self * 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'MB' = { return: (self * 1048576); });
+$__prototypes__->(find: '__integer__')->(insert: 'GB' = { return: (self * 1073741824); });
+$__prototypes__->(find: '__integer__')->(insert: 'TB' = { return: (self * 1099511627800); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'KBasMB' = { return: ((decimal:self) / 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'KBasGB' = { return: ((decimal:self) / 1048576); });
+$__prototypes__->(find: '__integer__')->(insert: 'KBasTB' = { return: ((decimal:self) / 1073741824); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'MBasGB' = { return: ((decimal:self) / 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'MBasTB' = { return: ((decimal:self) / 1048576); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'GBasTB' = { return: ((decimal:self) / 1024); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'MBasKB' = { return: (self * 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'GBasKB' = { return: (self * 1048576); });
+$__prototypes__->(find: '__integer__')->(insert: 'TBasKB' = { return: (self * 1073741824); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'GBasMB' = { return: ((decimal:self) / 1024); });
+$__prototypes__->(find: '__integer__')->(insert: 'TBasMB' = { return: ((decimal:self) / 1048576); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'TBasGB' = { return: ((decimal:self) / 1024); });
+
+
+//-----------------------------------------------------------------------------
+//:	american lengths
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'inches' 			= { return: self; });
+$__prototypes__->(find: '__integer__')->(insert: 'foot' 			= { return: (self * 12); });
+$__prototypes__->(find: '__integer__')->(insert: 'feet' 			= { return: (self * 12); });
+$__prototypes__->(find: '__integer__')->(insert: 'yards' 			= { return: (self * 36); });
+$__prototypes__->(find: '__integer__')->(insert: 'miles' 			= { return: (self * 63360); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsFeet' 		= { return: (self * 3); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsFeet' 		= { return: (self * 5280); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsYards'		= { return: (self * 1760); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsYards'		= { return: ((decimal:self) / 3); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMiles'		= { return: ((decimal:self) / 5280); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMiles'		= { return: ((decimal:self) / 1760 ); });
+
+
+//-----------------------------------------------------------------------------
+//:	american volumes
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'ounces' 			= { return: self; });
+$__prototypes__->(find: '__integer__')->(insert: 'pints' 			= { return: (self * 16); });
+$__prototypes__->(find: '__integer__')->(insert: 'quarts' 			= { return: (self * 32); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallons' 			= { return: (self * 128); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsQuarts' 	= { return: (self * 4); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsPints' 	= { return: (self * 8); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsGallons' 	= { return: ((decimal:self) / 4); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsPints' 	= { return: (self * 2); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsGallons' 	= { return: ((decimal:self) / 8); });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsQuarts' 	= { return: ((decimal:self) / 2); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsGallons' 	= { return: ((decimal:self) / 128); });
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsQuarts' 	= { return: ((decimal:self) / 32); });
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsPints' 	= { return: ((decimal:self) / 16); });
+
+
+//-----------------------------------------------------------------------------
+//:	american weights
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'ounces' 			= { return: self; });
+$__prototypes__->(find: '__integer__')->(insert: 'lbs' 				= { return: self * 16; });
+$__prototypes__->(find: '__integer__')->(insert: 'pounds' 			= { return: self * 16; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'tons' 			= { return: self * 2000; });
+$__prototypes__->(find: '__integer__')->(insert: 'longTons'			= { return: self * 2240; });
+$__prototypes__->(find: '__integer__')->(insert: 'metricTons' 		= { return: self * 2204.622622; });
+
+
+//-----------------------------------------------------------------------------
+//:	american areas
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInches'				= { return: self; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeet' 				= { return: self * 144; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYards' 				= { return: self * 1296; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMiles' 				= { return: self * 4014489599.46314; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMilesAsSqYards' 	= { return: self * 3097600.00399833; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMilesAsSqFeet' 		= { return: self * 27878399.9531053; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMiles' 	= { return: self * 0.000000322745161; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqFeet' 		= { return: self * 9; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMiles' 		= { return: self * 0.0000000358605734; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqYards' 		= { return: self * 0.111111111268946; });
+
+
+//-----------------------------------------------------------------------------
+//:	american As metric length
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsMillimeters' 	= { return: self * 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMillimeters' 	= { return: (self * 12 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMillimeters' 	= { return: (self * 36 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsMillimeters' 	= { return: (self * 63360 * 25.4); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsMillimetres' 	= { return: self * 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMillimetres' 	= { return: (self * 12 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMillimetres' 	= { return: (self * 36 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsMillimetres' 	= { return: (self * 63360 * 25.4); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsMm' 			= { return: self * 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMm' 			= { return: (self * 12 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMm' 			= { return: (self * 36 * 25.4); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsMm' 			= { return: (self * 63360 * 25.4); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsCentimeters' 	= { return: self * 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsCentimeters' 	= { return: (self * 12 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsCentimeters' 	= { return: (self * 36 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsCentimeters' 	= { return: (self * 63360 * 2.54); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsCentimetres' 	= { return: self * 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsCentimetres' 	= { return: (self * 12 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsCentimetres' 	= { return: (self * 36 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsCentimetres' 	= { return: (self * 63360 * 2.54); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsCm' 			= { return: self * 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsCm' 			= { return: (self * 12 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsCm' 			= { return: (self * 36 * 2.54); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsCm' 			= { return: (self * 63360 * 2.54); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsMeters' 		= { return: (self * 0.0254); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMeters' 		= { return: (self * 0.3048); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMeters' 		= { return: (self * 0.9144); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsMeters' 		= { return: (self * 1609.343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsMetres' 		= { return: (self * 0.0254); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsMetres' 		= { return: (self * 0.3048); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsMetres' 		= { return: (self * 0.9144); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsMetres' 		= { return: (self * 1609.343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsKilometers' 	= { return: (self * 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsKilometers' 	= { return: (self * 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsKilometers' 	= { return: (self * 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsKilometers' 	= { return: (self * 1.609343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsKilometres' 	= { return: (self * 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsKilometres' 	= { return: (self * 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsKilometres' 	= { return: (self * 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsKilometres' 	= { return: (self * 1.609343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'inchesAsKm' 			= { return: (self * 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'feetAsKm' 			= { return: (self * 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'yardsAsKm' 			= { return: (self * 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'milesAsKm' 			= { return: (self * 1.609343994); });
+
+
+//-----------------------------------------------------------------------------
+//:	metric As american length
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'millimetersAsInches' 	= { return: (decimal:self) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetersAsFeet' 	= { return: ((decimal:self) / 12) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetersAsYards' 	= { return: ((decimal:self) / 36) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetersAsMiles' 	= { return: ((decimal:self) / 63360) / 25.4; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'millimetresAsInches' 	= { return: (decimal:self) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetresAsFeet' 	= { return: ((decimal:self) / 12) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetresAsYards' 	= { return: ((decimal:self) / 36) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'millimetresAsMiles' 	= { return: ((decimal:self) / 63360) / 25.4; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'mmAsInches' 			= { return: (decimal:self) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'mmAsFeet' 			= { return: ((decimal:self) / 12) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'mmAsYards' 			= { return: ((decimal:self) / 36) / 25.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'mmAsMiles' 			= { return: ((decimal:self) / 63360) / 25.4; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'centimetersAsInches' 	= { return: (decimal:self) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetersAsFeet' 	= { return: ((decimal:self) / 12) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetersAsYards' 	= { return: ((decimal:self) / 36) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetersAsMiles' 	= { return: ((decimal:self) / 63360) / 2.54; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'centimetresAsInches' 	= { return: (decimal:self) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetresAsFeet' 	= { return: ((decimal:self) / 12) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetresAsYards' 	= { return: ((decimal:self) / 36) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'centimetresAsMiles' 	= { return: ((decimal:self) / 63360) / 2.54; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'cmAsInches' 			= { return: (decimal:self) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'cmAsFeet' 			= { return: ((decimal:self) / 12) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'cmAsYards' 			= { return: ((decimal:self) / 36) / 2.54; });
+$__prototypes__->(find: '__integer__')->(insert: 'cmAsMiles' 			= { return: ((decimal:self) / 63360) / 2.54; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'metersAsInches' 		= { return: ((decimal:self) / 0.0254); });
+$__prototypes__->(find: '__integer__')->(insert: 'metersAsFeet' 		= { return: ((decimal:self) / 0.3048); });
+$__prototypes__->(find: '__integer__')->(insert: 'metersAsYards' 		= { return: ((decimal:self) / 0.9144); });
+$__prototypes__->(find: '__integer__')->(insert: 'metersAsMiles' 		= { return: ((decimal:self) / 1609.343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'metresAsInches' 		= { return: ((decimal:self) / 0.0254); });
+$__prototypes__->(find: '__integer__')->(insert: 'metresAsFeet' 		= { return: ((decimal:self) / 0.3048); });
+$__prototypes__->(find: '__integer__')->(insert: 'metresAsYards' 		= { return: ((decimal:self) / 0.9144); });
+$__prototypes__->(find: '__integer__')->(insert: 'metresAsMiles' 		= { return: ((decimal:self) / 1609.343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'kilometersAsInches' 	= { return: ((decimal:self) / 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometersAsFeet' 	= { return: ((decimal:self) / 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometersAsYards' 	= { return: ((decimal:self) / 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometersAsMiles' 	= { return: ((decimal:self) / 1.609343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'kilometresAsInches' 	= { return: ((decimal:self) / 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometresAsFeet' 	= { return: ((decimal:self) / 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometresAsYards' 	= { return: ((decimal:self) / 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'kilometresAsMiles' 	= { return: ((decimal:self) / 1.609343994); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'kmAsInches' 			= { return: ((decimal:self) / 0.0000254); });
+$__prototypes__->(find: '__integer__')->(insert: 'kmAsFeet' 			= { return: ((decimal:self) / 0.0003048); });
+$__prototypes__->(find: '__integer__')->(insert: 'kmAsYards' 			= { return: ((decimal:self) / 0.0009144); });
+$__prototypes__->(find: '__integer__')->(insert: 'kmAsMiles' 			= { return: ((decimal:self) / 1.609343994); });
+
+
+//-----------------------------------------------------------------------------
+//:	american As metric volume 
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsMilliliters'	= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsMilliliters' 	= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsMilliliters'	= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsMilliliters' = { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsMillilitres'	= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsMillilitres' 	= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsMillilitres'	= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsMillilitres' = { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsMl'			= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsMl' 			= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsMl'			= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsMl' 			= { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsLiters'		= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsLiters' 		= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsLiters'		= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsLiters' 		= { return: (self * 3.785411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsLitres'		= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsLitres' 		= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsLitres'		= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsLitres' 		= { return: (self * 3.785411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsLtr'			= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'pintsAsLtr' 			= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'quartsAsLtr'			= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'gallonsAsLtr' 		= { return: (self * 3.785411784); });
+
+
+//-----------------------------------------------------------------------------
+//:	metric As american volume
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'millilitersAsOunces'	= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitersAsPints' 	= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitersAsQuarts'	= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitersAsGallons' = { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'millilitresAsOunces'	= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitresAsPints' 	= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitresAsQuarts'	= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'millilitresAsGallons' = { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'mlAsOunces'			= { return: self * 29.5735; });
+$__prototypes__->(find: '__integer__')->(insert: 'mlAsPint' 			= { return: (self * 473.176); });
+$__prototypes__->(find: '__integer__')->(insert: 'mlAsQuart'			= { return: (self * 946.353); });
+$__prototypes__->(find: '__integer__')->(insert: 'mlAsGallon' 			= { return: (self * 3785.411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'litersAsOunces'		= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'litersAsPints' 		= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'litersAsQuarts'		= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'litersAsGallons' 		= { return: (self * 3.785411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'litresAsOunces'		= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'litresAsPints' 		= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'litresAsQuarts'		= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'litresAsGallons' 		= { return: (self * 3.785411784); });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ltrAsOunces'			= { return: self * 0.0295735; });
+$__prototypes__->(find: '__integer__')->(insert: 'ltrAsPints' 			= { return: (self * 0.473176); });
+$__prototypes__->(find: '__integer__')->(insert: 'ltrAsQuarts'			= { return: (self * 0.946353); });
+$__prototypes__->(find: '__integer__')->(insert: 'ltrAsGallons' 		= { return: (self * 3.785411784); });
+
+
+//-----------------------------------------------------------------------------
+//:	american As metric weight
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsGrams'		= { return: self * 28.349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'lbsAsGrams' 			= { return: self * 453.59237; });
+$__prototypes__->(find: '__integer__')->(insert: 'poundsAsGrams' 		= { return: self * 453.59237; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsKilograms' 	= { return: self * 0.028349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'lbsAsKilograms' 		= { return: self * 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'poundsAsKilograms'	= { return: self * 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'tonsAsKilograms'		= { return: self * 907.18474; });
+$__prototypes__->(find: '__integer__')->(insert: 'longtonsAsKilograms'	= { return: self * 1016.04691; });
+$__prototypes__->(find: '__integer__')->(insert: 'metrictonsAsKilograms' = { return: self * 1000; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'ouncesAsKg' 			= { return: self * 0.028349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'lbsAsKg' 				= { return: self * 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'poundsAsKg'			= { return: self * 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'tonsAsKg'				= { return: self * 907.18474; });
+$__prototypes__->(find: '__integer__')->(insert: 'longtonsAsKg'			= { return: self * 1016.04691; });
+$__prototypes__->(find: '__integer__')->(insert: 'metrictonsAsKg' 		= { return: self * 1000; });
+
+
+//-----------------------------------------------------------------------------
+//:	metric As american weight
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'gramsAsOunces'		= { return: (decimal:self) / 28.349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'gramsAsLbs' 			= { return: (decimal:self) / 453.59237; });
+$__prototypes__->(find: '__integer__')->(insert: 'gramsAsPounds' 		= { return: (decimal:self) / 453.59237; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsOunces' 	= { return: (decimal:self) / 0.028349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsLbs' 		= { return: (decimal:self) / 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsPounds'	= { return: (decimal:self) / 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsTons'		= { return: (decimal:self) / 907.18474; });
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsLongtons'	= { return: (decimal:self) / 1016.04691; });
+$__prototypes__->(find: '__integer__')->(insert: 'KilogramsAsMetrictons' = { return: (decimal:self) / 1000; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsOunces' 			= { return: (decimal:self) / 0.028349523; });
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsLbs' 				= { return: (decimal:self) / 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsPounds'			= { return: (decimal:self) / 0.45359237; });
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsTons'				= { return: (decimal:self) / 907.18474; });
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsLongtons'			= { return: (decimal:self) / 1016.04691; });
+$__prototypes__->(find: '__integer__')->(insert: 'KgAsMetrictons' 		= { return: (decimal:self) / 1000; });
+
+
+
+//-----------------------------------------------------------------------------
+//:	american metric area conversions
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMillimeters'	= { return: self * 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMillimeters' 	= { return: self * 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMillimeters' 	= { return: self * 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqCentimeters'	= { return: self * 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqCentimeters' 	= { return: self * 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqCentimeters' 	= { return: self * 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMeters'		= { return: self * 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMeters' 		= { return: self * 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMeters' 		= { return: self * 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqKilometres' 	= { return: self * 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqKilometres' 	= { return: self * 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMilesAsSqKilometres' 	= { return: self * 2.58998811; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMillimetres'	= { return: self * 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMillimetres' 	= { return: self * 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMillimetres' 	= { return: self * 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqCentimetres'	= { return: self * 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqCentimetres' 	= { return: self * 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqCentimetres' 	= { return: self * 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMetres'		= { return: self * 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMetres' 		= { return: self * 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMetres' 		= { return: self * 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqKilometers' 	= { return: self * 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqKilometers' 	= { return: self * 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMilesAsSqKilometers' 	= { return: self * 2.58998811; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMm'			= { return: self * 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMm' 			= { return: self * 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMm' 			= { return: self * 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqCm'			= { return: self * 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqCm' 			= { return: self * 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqCm' 			= { return: self * 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqInchesAsSqMtr'			= { return: self * 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqMtr' 			= { return: self * 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqMtr' 			= { return: self * 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqFeetAsSqKm' 			= { return: self * 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqYardsAsSqKm' 			= { return: self * 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMilesAsSqKm' 			= { return: self * 2.58998811; });
+
+
+//-----------------------------------------------------------------------------
+//:	metric american area conversions
+//
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetersAsSqInches'	= { return: (decimal:self) / 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetersAsSqFeet' 	= { return: (decimal:self) / 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetersAsSqYards' 	= { return: (decimal:self) / 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetersAsSqInches'	= { return: (decimal:self) / 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetersAsSqFeet' 	= { return: (decimal:self) / 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetersAsSqYards' 	= { return: (decimal:self) / 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetersAsSqInches'		= { return: (decimal:self) / 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetersAsSqFeet' 		= { return: (decimal:self) / 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetersAsSqYards' 		= { return: (decimal:self) / 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometersAsSqFeet' 	= { return: (decimal:self) / 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometersAsSqYards' 	= { return: (decimal:self) / 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometersAsSqMiles' 	= { return: (decimal:self) / 2.58998811; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetresAsSqInches'	= { return: (decimal:self) / 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetresAsSqFeet' 	= { return: (decimal:self) / 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMillimetresAsSqYards' 	= { return: (decimal:self) / 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetresAsSqInches'	= { return: (decimal:self) / 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetresAsSqFeet' 	= { return: (decimal:self) / 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCentimetresAsSqYards' 	= { return: (decimal:self) / 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetresAsSqInches'		= { return: (decimal:self) / 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetresAsSqFeet' 		= { return: (decimal:self) / 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMetresAsSqYards' 		= { return: (decimal:self) / 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometresAsSqFeet' 	= { return: (decimal:self) / 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometresAsSqYards' 	= { return: (decimal:self) / 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKilometresAsSqMiles' 	= { return: (decimal:self) / 2.58998811; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMmAsSqInches'			= { return: (decimal:self) / 6451.6; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMmAsSqFeet' 			= { return: (decimal:self) / 929030.4; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMmAsSqYards' 			= { return: (decimal:self) / 8361273.6; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqCmAsSqInches'			= { return: (decimal:self) / 6.4516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCmAsSqFeet' 			= { return: (decimal:self) / 929.0304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqCmAsSqYards' 			= { return: (decimal:self) / 8361.2736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqMtrAsSqInches'			= { return: (decimal:self) / 0.00064516; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMtrAsSqFeet' 			= { return: (decimal:self) / 0.09290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqMtrAsSqYards' 			= { return: (decimal:self) / 0.83612736; });
+
+$__prototypes__->(find: '__integer__')->(insert: 'sqKmAsSqFeet' 			= { return: (decimal:self) / 0.00000009290304; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKmAsSqYards' 			= { return: (decimal:self) / 0.00000083612736; });
+$__prototypes__->(find: '__integer__')->(insert: 'sqKmAsSqMiles' 			= { return: (decimal:self) / 2.58998811; });
+
+
+//-----------------------------------------------------------------------------
+//:	timeAgo relative dates
+//
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'secondsAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -second=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'minutesAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -minute=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'hoursAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -hour=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'daysAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -day=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'weeksAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -week=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'monthsAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -month=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'yearsAgo' = { 
+				local:'x' = date; 
+				#x->(subtract: -year=self); 
+				return: #x;
+				} );
+
+//-----------------------------------------------------------------------------
+//:	timeFromNow relative dates
+//
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'secondsFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -second=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'minutesFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -minute=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'hoursFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -hour=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'daysFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -day=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'weeksFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -week=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'monthsFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -month=self); 
+				return: #x;
+				} );
+
+$__prototypes__->(find: '__integer__')->
+	(insert: 'yearsFromNow' = { 
+				local:'x' = date; 
+				#x->(add: -year=self); 
+				return: #x;
+				} );
+
+?>

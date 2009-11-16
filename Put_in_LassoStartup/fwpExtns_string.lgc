@@ -1,0 +1,187 @@
+﻿<?lassoscript
+//............................................................................
+//
+//	pageblocks: (c) 2002-2007 http://www.pageblocks.org/
+//
+//............................................................................
+/*
+
+	{fileName=		fwpExtns_string.lgc }
+	{rsrcType=		file }
+	{rsrcName=		fwpExtns_string }
+	{rsrcHTTP=		http://www.pageblocks.org/refc/fwpExtns_string }
+
+	{lassoVrsnMin=	8.1.0 }
+	{lassoVrsnMax=	8.5.3 }
+
+	{author=		Greg Willits }
+	{authorEmail=	subscribe to pbTalk at www.pageblocks.org/talk/ }
+	{authorHTTP=	http://www.pageblocks.org/ }
+
+	{desc=			Extends the Lasso String class with several 
+					custom methods. }
+
+
+	{maintvsrn=		1.0.1 }
+	{maintrelease=	----- }
+	{maintdate=		2008-01-29 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	fixed bug in squishParagraphs which would crash if there
+	 				were no recognized paragraphs breaks in the submitted string }
+
+	{maintvsrn=		1.0.0 }
+	{maintrelease=	5.2.5 }
+	{maintdate=		2007-07-23 }
+	{maintauthor=	Greg Willits }
+	{maintnotes=	initial release }
+*/
+//............................................................................
+
+
+
+//-----------------------------------------------------------------------------
+//	
+//
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'getLeft' = { 
+
+		local:'getLength' = (params->get:1);
+	
+		if: #getLength > self->size;
+			#getLength = self->size;
+		/if;
+	
+		if: (params >> '-atWordBreaks');
+			return:(string_removeTrailing:
+				self->(substring: 1, #getLength),
+				-pattern = ' ' + (self->(substring:1,#getLength))->(split:' ')->last);
+		else;
+			return:self->(substring: 1, #getLength);
+		/if;
+	} );
+
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'getRight' = { 
+
+		local:'getLength' = integer:(params->get:1);
+	
+		if: #getLength > self->size;
+			#getLength = self->size;
+		/if;
+	
+		return:self->(substring:((self->size) - #getLength) + 1, #getLength);
+	} );
+
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'getWords' = { 
+
+		local:
+			'getLength' 	= integer:(params->get:1),
+			'allWords'		= self->(split:' '),
+			'returnWords'	= array;
+	
+		if: #getLength > #allWords->size;
+			#getLength = #allWords->size;
+		/if;
+	
+		loop: #getLength;
+			#returnWords->(insert:#allWords->(get:loop_count));
+			#returnWords->(insert:' ');
+		/loop;
+		#returnWords = #returnWords->join;
+		#returnWords->(removeTrailing:' ');
+	
+		return: #returnWords;
+	} );
+
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'getSentences' = { 
+
+		local:
+			'getLength' 		= integer:(params->get:1),
+			'allSentences'		= self,
+			'returnSentences'	= array;
+
+		if: params >> '-withoutParBreaks';
+			#allSentences = #allSentences->squishParagraphs;
+		/if;
+
+		#allSentences = #allSentences->(split:'. ');
+
+		if: #getLength > #allSentences->size;
+			#getLength = #allSentences->size;
+		/if;
+	
+		loop: #getLength;
+			#returnSentences->(insert: #allSentences->(get:loop_count));
+			#returnSentences->(insert:'. ');
+		/loop;
+	
+		#returnSentences = #returnSentences->join;
+		#returnSentences->(removeTrailing:' ');
+		
+		return: #returnSentences;
+	} );
+
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'getParagraphs' = { 
+
+		local:
+			'getLength'			= integer:(params->get:1),
+			'allParagraphs'		= self,
+			'returnParagraphs'	= array;
+	
+		#allParagraphs = #allParagraphs->squishParagraphs;
+
+		#allParagraphs = #allParagraphs->(split:'\r\r');
+
+		if: #getLength > #allParagraphs->size;
+			#getLength = #allParagraphs->size;
+		/if;
+	
+		loop: #getLength;
+			#returnParagraphs->(insert:#allParagraphs->(get:loop_count));
+			#returnParagraphs->(insert:'\r\r');
+		/loop;
+		#returnParagraphs = #returnParagraphs->join;
+		#returnParagraphs->(removeTrailing:'\r\r');
+	
+		return: #returnParagraphs;
+	} );
+
+
+$__prototypes__->(find: '__string__')->(insert: 
+	'squishParagraphs' = { 
+
+		local: 'allText' = self;
+	
+		#allText->(replace:'\r\r','\r');
+		#allText->(replace:'\r\n\r\n','\r');
+		#allText->(replace:'\n\n','\r');
+		#allText->(replace:'\r\n','\r');
+		#allText->(replace:'\n','\r');
+	
+		if: #allText >> '\r';
+			#allText = #allText->(split:'\r');
+		else: #allText >> '<br /><br />';
+			#allText = #allText->(split:'<br /><br />');
+		else: #allText >> '<br><br>';
+			#allText = #allText->(split:'<br><br>');
+		else: #allText >> '</p>';
+			#allText->(replace:'<p>','');
+			#allText = #allText->(split:'</p>');
+		/if;
+
+		(#allText->type == 'array')
+			? #allText = #allText->(join:'\r\r');
+
+		return: #allText;
+	} );
+
+
+?>
